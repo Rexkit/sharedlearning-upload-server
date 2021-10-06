@@ -11,7 +11,7 @@ const configuration = require('./knexfile')[environment];
 const database = require('knex')(configuration);
 
 var corsOptions = {
-    origin: 'http://localhost:3000',
+    origin: process.env.APP_URL,
     credentials: true
 };
 
@@ -43,7 +43,7 @@ app.options('*', cors(corsOptions));
 app.use(cookieParser());
 
 app.use(function(req, res, next) {
-    res.setHeader('Access-Control-Allow-Origin', 'http://localhost:3000');
+    res.setHeader('Access-Control-Allow-Origin', process.env.NODE_ENVAPP_URL);
     res.setHeader('Access-Control-Allow-Credentials', 'true');
     next();
 });
@@ -149,4 +149,7 @@ app.get('/video/:page_id/:filename', function(req,res){
     videoStream.pipe(res);
 });
 
-app.listen(3001);
+const port = process.env.PORT || 80;
+app.listen( port, () => {
+    console.log( `Server started on port ${ port }.` );
+} );
